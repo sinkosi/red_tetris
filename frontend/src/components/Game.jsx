@@ -1,8 +1,23 @@
-import React from "react";
-import GameCanvas from "./GameCanvas";
+import { Button } from "@material-ui/core"
+import React, { useState } from "react"
+import GameCanvas from "./GameCanvas"
 
 const Game = (props) => {
-	return <GameCanvas />;
-};
+	const [gameOver, setGameOver] = useState(true)
 
-export default Game;
+	const handleStart = () => setGameOver(false)
+
+	return (
+		<>
+			{gameOver ? (
+				<Button color="primary" onClick={handleStart}>
+					start
+				</Button>
+			) : (
+				<GameCanvas setGameOver={setGameOver} />
+			)}
+		</>
+	)
+}
+
+export default Game

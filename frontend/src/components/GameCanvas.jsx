@@ -1,200 +1,8 @@
 import React, { useEffect, useState, useRef } from "react"
 import { pieces, pieceStartPosition } from "../misc/pieces"
-
-/**********************************\
- * canvas config data
-\**********************************/
-const ROWS = 20
-const COLS = 10
-const EMPTY_BG = "#765"
-const BORDER = "adf"
-const BLOCK = 30
-
-/****
- * Canvas drawing functions
- */
-const drawBlock = (context, x, y, colour = EMPTY_BG, strokeColour = BORDER) => {
-	context.fillStyle = colour
-	context.fillRect(x * BLOCK, y * BLOCK, BLOCK, BLOCK)
-	context.strokeStyle = strokeColour
-	context.strokeRect(x * BLOCK, y * BLOCK, BLOCK, BLOCK)
-}
-
-/***
- * Tetramino Class
- */
-
-function Piece(context, grid, piece, colour) {
-	this.piece = piece
-	this.colour = colour
-	this.active = 0
-	this.x = 0
-	this.y = 0
-	this.context = context
-	this.grid = grid
-
-	this.draw = (active = this.active) => {
-		this.active = active
-
-		for (let row = 0; row < this.piece[this.active].length; row++) {
-			for (let col = 0; col < this.piece[this.active][row].length; col++) {
-				if (this.piece[this.active][row][col]) drawBlock(this.context, this.x + col, this.y + row, this.colour)
-			}
-		}
-	}
-	this.clear = (active = this.active) => {
-		this.active = active
-
-		for (let row = 0; row < this.piece[this.active].length; row++) {
-			for (let col = 0; col < this.piece[this.active][row].length; col++) {
-				if (this.piece[this.active][row][col]) drawBlock(this.context, this.x + col, this.y + row, EMPTY_BG)
-			}
-		}
-	}
-	this.lock = () => {
-		for (let row = 0; row < this.piece[this.active].length; row++) {
-			for (let col = 0; col < this.piece[this.active][row].length; col++) {
-				if (this.piece[this.active][row][col]) grid.coords[this.y + row][this.x + col] = this.colour
-			}
-		}
-	}
-
-	this.rotate = () => {
-		if (!this.isCollition(this.x, this.y, (this.active + 1) % 4)) {
-			this.clear()
-			this.active = (1 + this.active) % this.piece.length
-			this.draw()
-		} else if (!this.isCollition(this.x + 1, this.y, (this.active + 1) % 4)) {
-			this.clear()
-			this.x = this.x + 1
-			this.active = (1 + this.active) % this.piece.length
-			this.draw()
-		} else if (!this.isCollition(this.x - 1, this.y, (this.active + 1) % 4)) {
-			this.clear()
-			this.x = this.x - 1
-
-			this.active = (1 + this.active) % this.piece.length
-			this.draw()
-		} else if (!this.isCollition(this.x - 2, this.y, (this.active + 1) % 4)) {
-			this.clear()
-			this.x = this.x - 2
-
-			this.active = (1 + this.active) % this.piece.length
-			this.draw()
-		}
-	}
-
-	this.moveLeft = () => {
-		if (!this.isCollition(this.x - 1)) {
-			this.clear()
-			this.x = this.x - 1
-			this.draw()
-		}
-	}
-
-	this.moveRight = () => {
-		if (!this.isCollition(this.x + 1)) {
-			this.clear()
-			this.x = this.x + 1
-			this.draw()
-		}
-	}
-
-	this.moveDown = () => {
-		if (!this.isCollition(this.x, this.y + 1)) {
-			this.clear()
-			this.y = this.y + 1
-			this.draw()
-			return true
-		}
-		return false
-	}
-
-	this.isCollition = (newX = this.x, newY = this.y, newState = this.active) => {
-		for (let row = 0; row < this.piece[newState].length; row++) {
-			for (let col = 0; col < this.piece[newState][row].length; col++) {
-				if (this.piece[newState][row][col]) {
-					if (newX + col < 0 || newX + col >= COLS || newY + row >= ROWS) {
-						console.log("collision")
-						return true
-					}
-					if (this.grid.coords[newY + row][newX + col] !== EMPTY_BG) {
-						return true
-					}
-				}
-			}
-		}
-
-		return false
-	}
-}
-
-/**
- * Grid class
- */
-
-function Grid(context, colums = COLS, rows = ROWS, backgroundColour = EMPTY_BG) {
-	this.colums = colums
-	this.rows = rows
-	this.colour = backgroundColour
-	this.coords = []
-
-	this.init = () => {
-		for (let row = 0; row < this.rows; row++) {
-			this.coords[row] = []
-			for (let col = 0; col < this.colums; col++) {
-				this.coords[row][col] = EMPTY_BG
-			}
-		}
-		this.draw()
-	}
-
-	this.draw = () => {
-		let r = 0
-		let c = 0
-		while (this.coords[r]) {
-			c = 0
-			while (this.coords[r][c]) {
-				drawBlock(context, c, r, this.coords[r][c])
-				c++
-			}
-			r++
-		}
-	}
-
-	this.penalty = (currentPiece) => {
-		let y = 0
-		while (this.coords[y + 1]) {
-			this.coords[y] = this.coords[y + 1]
-			y++
-		}
-		this.coords[y] = []
-		for (let c = 0; c < COLS; c++) {
-			this.coords[y][c] = "red"
-		}
-		this.draw()
-
-		if (currentPiece.y - 1 >= 0) currentPiece.y -= 1
-		currentPiece.draw()
-	}
-
-	this.removeFull = () => {}
-}
-
-// function penalty(grid, piece) {
-// 	let y = 0
-// 	while (grid.coords[y + 1]) {
-// 		grid.coords[y] = grid.coords[y + 1]
-// 		y++
-// 	}
-// 	grid.coords[y] = []
-// 	for (let c = 0; c < COLS; c++) {
-// 		grid.coords[y][c] = "red"
-// 	}
-// 	grid.draw()
-// 	piece.y -= 1
-// 	piece.draw()
-// }
+import { config } from "../misc/canvasConfig"
+import CanvasGrid from "../misc/canvasGrid"
+import Piece from "../misc/Piece"
 
 function controls(key, piece, grid, context) {
 	if (key === "ArrowUp") piece.rotate()
@@ -219,10 +27,11 @@ function newPiece(context, grid) {
 	newPiece.x = x
 	newPiece.y = y
 	newPiece.draw()
+	if (newPiece.isCollition(x, y, pieceVariant)) return null
 	return newPiece
 }
 
-const GameCanvas = () => {
+const GameCanvas = (props) => {
 	const canvasRef = useRef(null)
 	const [context, setContext] = useState(null)
 	const [grid, setGrid] = useState(null)
@@ -241,7 +50,7 @@ const GameCanvas = () => {
 	useEffect(() => {
 		if (context) {
 			if (!grid) {
-				let gr = new Grid(context)
+				let gr = new CanvasGrid(context)
 				gr.init()
 				setGrid(gr)
 			} else {
@@ -283,13 +92,16 @@ const GameCanvas = () => {
 			if (currentPiece)
 				if (!currentPiece.moveDown()) {
 					currentPiece.lock()
-					setCurrentPiece(newPiece(context, grid))
+					grid.removeFilledLines()
+					let np = newPiece(context, grid)
+					if (!np) props.setGameOver(true)
+					setCurrentPiece(np)
 					setSeconds(0)
 					console.log("lock current piece and request for the next piece")
 				}
 		}, 1000)
 		return () => clearInterval(interval)
-	}, [currentPiece])
+	}, [currentPiece, context, grid, props])
 
 	return (
 		<div
@@ -300,8 +112,8 @@ const GameCanvas = () => {
 			<canvas
 				id="canvas"
 				ref={canvasRef}
-				width={COLS * BLOCK}
-				height={ROWS * BLOCK}
+				width={config.COLS * config.BLOCK}
+				height={config.ROWS * config.BLOCK}
 				style={{
 					border: "2px solid #000",
 					marginTop: 10,
