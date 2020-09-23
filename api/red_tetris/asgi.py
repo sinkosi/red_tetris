@@ -1,5 +1,5 @@
 """
-ASGI config for Red_Tetris project.
+ASGI config for red_tetris project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Red_Tetris.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'red_tetris.settings')
 
 application = get_asgi_application()
