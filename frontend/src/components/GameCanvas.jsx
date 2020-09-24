@@ -3,6 +3,7 @@ import { pieces, pieceStartPosition } from "../misc/pieces"
 import { config } from "../misc/canvasConfig"
 import CanvasGrid from "../misc/canvasGrid"
 import Piece from "../misc/Piece"
+//import Swipeable from 'react-swipeable'
 
 function controls(key, piece, grid, context) {
 	if (key === "ArrowUp") piece.rotate()
@@ -12,7 +13,15 @@ function controls(key, piece, grid, context) {
 	if (key === "l") piece.lock()
 	if (key === "p") grid.penalty(piece)
 	if (key === "n") newPiece(context, grid)
+	/*if (key === onSwipedUp) piece.rotate()
+	if (key === onSwipedLeft) piece.moveLeft()
+	PropTypes.func,
+		onSwipedRight: PropTypes.func,
+		onSwipedDown: PropTypes.func,
+		onSwipedLeft: PropTypes.func,onSwip)*/
 }
+
+//function mobile_controls(onSwiped, piec)
 
 function newPiece(context, grid) {
 	if (!context || !grid) return null
