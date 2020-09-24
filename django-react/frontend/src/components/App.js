@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
+//import Header from "./Header"
 
 class App extends Component {
   constructor(props) {
@@ -33,6 +34,7 @@ class App extends Component {
 
   render() {
     return (
+        
       <ul>
         {this.state.data.map(contact => {
           return (
