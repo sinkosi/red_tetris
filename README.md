@@ -1,18 +1,17 @@
-
-# Red Tetris
-
+# Red Tetris <!-- omit in toc -->
+----------
  This project is about creating a dating website.
- ![Matcha Login Page](docs/Screenshot.png)
+ 
+  ![Tetris Gameplay Page](docs/../frontend/build/../public/img192.png)
 
-- [Red Tetris](#red-tetris)
-  - [Introduction](#introduction)
-  - [Objectives](#objectives)
-  - [Mandatory](#mandatory)
-  - [How To Use](#how-to-use)
-    - [Running Back-End](#running-back-end)
-    - [Running Front-End](#running-front-end)
-  - [Further Reading](#further-reading)
-  - [CONTRIBUTORS](#contributors)
+- [Introduction](#introduction)
+- [Objectives](#objectives)
+- [Mandatory](#mandatory)
+- [How To Use](#how-to-use)
+  - [Running Back-End](#running-back-end)
+  - [Running Front-End](#running-front-end)
+- [Further Reading](#further-reading)
+- [Contributors](#contributors)
   
  ## Introduction
  The purpose of this project is to create an app allowing two potential lovers to meet, from the registration to the final encounter.
@@ -88,7 +87,7 @@ If you wish to get the [Front-End](frontend/README.md) running, check the docume
 - [x] Security (Passwords / CSRF / SQL Injection)
 - [ ] BONUS
 
-## CONTRIBUTORS
+## Contributors
 
 <!-- ![Mosima Mamaleke](api/uploads/default.png){:height="50%" width="50%"} ![Sibonelo Nkosi](api/uploads/default.png){:height="50%" width="50%"} -->
 
