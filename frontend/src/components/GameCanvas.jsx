@@ -1,47 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import { config } from "../misc/canvasConfig"
 import CanvasGrid from "../misc/canvasGrid"
-<<<<<<< HEAD
-import Piece from "../misc/Piece"
-//import Swipeable from 'react-swipeable'
-
-function controls(key, piece, grid, context) {
-	if (key === "ArrowUp") piece.rotate()
-	if (key === "ArrowLeft") piece.moveLeft()
-	if (key === "ArrowRight") piece.moveRight()
-	if (key === "ArrowDown") piece.moveDown()
-	if (key === "l") piece.lock()
-	if (key === "p") grid.penalty(piece)
-	if (key === "n") newPiece(context, grid)
-	/*if (key === onSwipedUp) piece.rotate()
-	if (key === onSwipedLeft) piece.moveLeft()
-	PropTypes.func,
-		onSwipedRight: PropTypes.func,
-		onSwipedDown: PropTypes.func,
-		onSwipedLeft: PropTypes.func,onSwip)*/
-}
-
-//function mobile_controls(onSwiped, piec)
-
-function newPiece(context, grid) {
-	if (!context || !grid) return null
-
-	let pieceNum = Math.floor(Math.random() * pieces.length)
-	let pieceVariant = Math.floor(Math.random() * pieces[pieceNum][0].length)
-	console.log(pieceNum, pieceVariant)
-	let newPiece = new Piece(context, grid, pieces[pieceNum][0], pieces[pieceNum][1])
-
-	newPiece.active = pieceVariant
-	let [y, x] = pieceStartPosition(pieceNum, pieceVariant)
-	newPiece.x = x
-	newPiece.y = y
-	newPiece.draw()
-	if (newPiece.isCollition(x, y, pieceVariant)) return null
-	return newPiece
-}
-
-const GameCanvas = (props) => {
-=======
 
 const GameCanvas = ({
 	grid,
@@ -53,7 +12,6 @@ const GameCanvas = ({
 	setContext,
 	getNextPiece,
 }) => {
->>>>>>> 7fa4c5591e8fde325e70952cc5345229df148ea9
 	const canvasRef = useRef(null)
 
 	useEffect(() => {
