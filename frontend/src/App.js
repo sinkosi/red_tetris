@@ -1,7 +1,7 @@
 import React from "react"
 import CssBaseline from "@material-ui/core/CssBaseline"
 
-import Header from "./components/Header"
+// import Header from "./components/Header"
 import Game from "./components/Game"
 
 import "./App.css"
@@ -11,7 +11,7 @@ function App(props) {
 	return (
 		<>
 			<CssBaseline>
-				<Header />
+				{/* <Header /> */}
 				<Game />
 				{/* <Footer /> */}
 			</CssBaseline>
