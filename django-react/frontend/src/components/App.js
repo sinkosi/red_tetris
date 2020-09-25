@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
-//import Header from "./Headerr"
+//import Header from "./Header.jsx";
+//import Head from "./Head.jsx";
 
 class App extends Component {
   constructor(props) {
@@ -35,6 +36,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        
       <h1>Darn!</h1>
       Is this the thing that I am actually looking for
       <br/>
