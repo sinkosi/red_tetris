@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useState, useRef } from "react"
+import { pieces, pieceStartPosition } from "../misc/pieces"
 import { config } from "../misc/canvasConfig"
 import CanvasGrid from "../misc/canvasGrid"
-<<<<<<< HEAD
 import Piece from "../misc/Piece"
 //import Swipeable from 'react-swipeable'
 
@@ -41,20 +41,10 @@ function newPiece(context, grid) {
 }
 
 const GameCanvas = (props) => {
-=======
-
-const GameCanvas = ({
-	grid,
-	currentPiece,
-	setCurrentPiece,
-	setGrid,
-	setGameOver,
-	context,
-	setContext,
-	getNextPiece,
-}) => {
->>>>>>> 7fa4c5591e8fde325e70952cc5345229df148ea9
 	const canvasRef = useRef(null)
+	const [context, setContext] = useState(null)
+	const [grid, setGrid] = useState(null)
+	const [currentPiece, setCurrentPiece] = useState(null)
 
 	useEffect(() => {
 		if (canvasRef.current) {
@@ -64,7 +54,7 @@ const GameCanvas = ({
 				setContext(renderCtx)
 			}
 		}
-	}, [context, setContext])
+	}, [context])
 
 	useEffect(() => {
 		if (context) {
@@ -73,35 +63,61 @@ const GameCanvas = ({
 				gr.init()
 				setGrid(gr)
 			} else {
-				// console.log("grid already exist")
-				// grid.draw()
+				console.log("grid already exist")
+
 				if (!currentPiece) {
-					console.log("request for a new piece")
-					getNextPiece()
+					let piece = newPiece(context, grid)
+					piece.draw()
+					setCurrentPiece(piece)
+				} else {
+					console.log("current piece already set: ", currentPiece)
 				}
+
+				/**
+				 * this should be where the drawing magic happens
+				 */
 			}
 		}
-		return () => {}
-	}, [context, grid, currentPiece, setCurrentPiece, setGrid, getNextPiece])
+		return () => {
+			console.log("this is where the cleanup stuff happens")
+		}
+	}, [context, grid, currentPiece])
+
+	useEffect(() => {
+		const handleKeyPress = ({ key }) => controls(key, currentPiece, grid, context)
+		if (currentPiece) {
+			document.addEventListener("keydown", handleKeyPress)
+		}
+		return () => {
+			document.removeEventListener("keydown", handleKeyPress)
+		}
+	}, [currentPiece, grid, context])
+
+	const [seconds, setSeconds] = useState(0)
 
 	useEffect(() => {
 		const interval = setInterval(() => {
+			setSeconds((seconds) => seconds + 1)
 			if (currentPiece)
 				if (!currentPiece.moveDown()) {
 					currentPiece.lock()
 					grid.removeFilledLines()
-					grid.draw()
-					getNextPiece()
+					let np = newPiece(context, grid)
+					if (!np) props.setGameOver(true)
+					setCurrentPiece(np)
+					setSeconds(0)
+					console.log("lock current piece and request for the next piece")
 				}
 		}, 1000)
 		return () => clearInterval(interval)
-	}, [currentPiece, context, grid, setGameOver, setCurrentPiece, setContext, getNextPiece])
+	}, [currentPiece, context, grid, props])
 
 	return (
 		<div
 			style={{
 				textAlign: "center",
 			}}>
+			<h3>{seconds} seconds since mount</h3>
 			<canvas
 				id="canvas"
 				ref={canvasRef}
