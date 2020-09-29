@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react"
 import { config } from "../misc/canvasConfig"
 import CanvasGrid from "../misc/canvasGrid"
-<<<<<<< HEAD
-import Piece from "../misc/Piece"
+import Piece, { newPiece } from "../misc/Piece"
 //import Swipeable from 'react-swipeable'
 
 function controls(key, piece, grid, context) {
@@ -23,25 +22,24 @@ function controls(key, piece, grid, context) {
 
 //function mobile_controls(onSwiped, piec)
 
-function newPiece(context, grid) {
-	if (!context || !grid) return null
+// function newPiece(context, grid) {
+// 	if (!context || !grid) return null
 
-	let pieceNum = Math.floor(Math.random() * pieces.length)
-	let pieceVariant = Math.floor(Math.random() * pieces[pieceNum][0].length)
-	console.log(pieceNum, pieceVariant)
-	let newPiece = new Piece(context, grid, pieces[pieceNum][0], pieces[pieceNum][1])
+// 	let pieceNum = Math.floor(Math.random() * pieces.length)
+// 	let pieceVariant = Math.floor(Math.random() * pieces[pieceNum][0].length)
+// 	console.log(pieceNum, pieceVariant)
+// 	let newPiece = new Piece(context, grid, pieces[pieceNum][0], pieces[pieceNum][1])
 
-	newPiece.active = pieceVariant
-	let [y, x] = pieceStartPosition(pieceNum, pieceVariant)
-	newPiece.x = x
-	newPiece.y = y
-	newPiece.draw()
-	if (newPiece.isCollition(x, y, pieceVariant)) return null
-	return newPiece
-}
+// 	newPiece.active = pieceVariant
+// 	let [y, x] = pieceStartPosition(pieceNum, pieceVariant)
+// 	newPiece.x = x
+// 	newPiece.y = y
+// 	newPiece.draw()
+// 	if (newPiece.isCollition(x, y, pieceVariant)) return null
+// 	return newPiece
+// }
 
-const GameCanvas = (props) => {
-=======
+// const GameCanvas = (props) => {
 
 const GameCanvas = ({
 	grid,
@@ -53,7 +51,6 @@ const GameCanvas = ({
 	setContext,
 	getNextPiece,
 }) => {
->>>>>>> 7fa4c5591e8fde325e70952cc5345229df148ea9
 	const canvasRef = useRef(null)
 
 	useEffect(() => {
