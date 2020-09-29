@@ -2,14 +2,15 @@
   "name": "frontend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --mode development ./src/index.js --output ./static/frontend/main.js",
-    "build": "webpack --mode production ./src/index.js --output ./static/frontend/main.js"
+    "build": "webpack --mode production ./src/index.js --output ./static/frontend/main.js",
+    "start": "webpack-dev-server --open --hot --mode development --content-base ./templates/frontend"
   },
   "keywords": [],
-  "author": "",
+  "author": "Sibonelo Nkosi, Mosima Mamaleka",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.11.6",
@@ -19,6 +20,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   }
 }
