@@ -1,20 +1,39 @@
-# Red Tetris Boilerplate
+# Red Tetris
+
+![Tetris Gameplay Page](docs/img192.png)
+
+## Table Of Contents
+
+- [Red Tetris](#red-tetris)
+  - [Table Of Contents](#table-of-contents)
+    - [Install](#install)
+    - [Development Mode](#development-mode)
+      - [Launch Server](#launch-server)
+      - [Launch Client](#launch-client)
+      - [Test](#test)
+      - [fake.js](#fakejs)
+      - [redux.js](#reduxjs)
+      - [server.js](#serverjs)
+      - [Coverage](#coverage)
+    - [Production Mode](#production-mode)
+  - [Further Reading](#further-reading)
+  - [Contributors](#contributors)
 
 This starter kit was made to help students to develop red_tetris project : a Full Stack Javascript Tetris. We can also use it as a starting point for any product made of React / Redux and socket.io.
 
 It helps:
 
-* to transpile with Babel ES6 code
-* to bundle with Wbepack JS files and hot reload client's code
-* to write tests and check code coverage.
+- to transpile with Babel ES6 code
+- to bundle with Wbepack JS files and hot reload client's code
+- to write tests and check code coverage.
 
 Because we use React, Redux, Node.js and Socket.io, we had to define 3 kinds of unit tests :
 
-* React ones like explained in redux documentation + `chai-equal-jsx`
-* Redux ones, but instead of just testing pure functions, we defined a middleware to test state’s impact after one or many actions.
-* Redux/Socket.io/Node.js, same as before, we use the same middleware but this time we can test state’s updates after socketio messages round trip.
+- React ones like explained in redux documentation + `chai-equal-jsx`
+- Redux ones, but instead of just testing pure functions, we defined a middleware to test state’s impact after one or many actions.
+- Redux/Socket.io/Node.js, same as before, we use the same middleware but this time we can test state’s updates after socketio messages round trip.
 
-## Install
+### Install
 
 Install [node](https://nodejs.org/en/) first. After that:
 
@@ -124,10 +143,10 @@ describe('Fake redux test', function(){
 
 *configureStore* :
 
-* `reducer`:  not necessary the root one
-* `socket`:  (unused here)
-* `initial state`:  set up to realize the action
-* `actions hook`: object where keys are action’s type and values are callbacks. `action’s type` is one of your actions defined in your application, `callback` function will receive  {getState, dispatch, action} as real parameter.
+- `reducer`:  not necessary the root one
+- `socket`:  (unused here)
+- `initial state`:  set up to realize the action
+- `actions hook`: object where keys are action’s type and values are callbacks. `action’s type` is one of your actions defined in your application, `callback` function will receive  {getState, dispatch, action} as real parameter.
 
 Thanks to the hook you can react to actions, just to check a new state after an action, or to send actions to follow a workflow and check state at the end.
 
@@ -231,3 +250,39 @@ $  DEBUG=tetris:* node dist/server/main.js
 In production mode, node.js server serves `index.html` and `bundle.js`, so you have to point to url set up in `params.js`
 
 That’s all folks ...
+
+
+## Further Reading
+
+[Documentation](docs/documentation.pdf)
+<!-- omit in toc -->
+## FINAL MARK /100
+
+- [x] Simple Launch of Server
+- [x] User Account Creation
+- [x] User Account Confirmation Requirement
+- [x] Complete Profile
+- [x] Matching Algorithm
+- [x] Profile Search
+- [x] Search By Filter
+- [x] Sorting While Filtering
+- [x] Geolocation
+- [x] Popularity & Rating System
+- [ ] Notifications
+- [x] See who viewed your profile
+- [x] View another user's profile
+- [x] Last Seen
+- [x] Block Account
+- [x] Chat
+- [x] Browser Compatibility
+- [x] Mobile Phone Adaptation
+- [x] Security (Passwords / CSRF / SQL Injection)
+- [ ] BONUS
+
+## Contributors
+
+<!-- ![Mosima Mamaleke](api/uploads/default.png){:height="50%" width="50%"} ![Sibonelo Nkosi](api/uploads/default.png){:height="50%" width="50%"} -->
+
+[Mosima Mamaleke](www.gihub.com/mmamalek)
+
+[Sibonelo Nkosi](www.github.com/sinkosi)
