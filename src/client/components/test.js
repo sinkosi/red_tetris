@@ -8,6 +8,7 @@ export const Tetris = () => {
 
 export const Board = () => {
   return (
+    
     <div/>
   )
 }

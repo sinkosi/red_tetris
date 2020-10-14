@@ -1,23 +1,22 @@
-# Red Tetris
+# Red Tetris<!-- omit in toc -->
 
 ![Tetris Gameplay Page](docs/img192.png)
 
 ## Table Of Contents
 
-- [Red Tetris](#red-tetris)
-  - [Table Of Contents](#table-of-contents)
-    - [Install](#install)
-    - [Development Mode](#development-mode)
-      - [Launch Server](#launch-server)
-      - [Launch Client](#launch-client)
-      - [Test](#test)
-      - [fake.js](#fakejs)
-      - [redux.js](#reduxjs)
-      - [server.js](#serverjs)
-      - [Coverage](#coverage)
-    - [Production Mode](#production-mode)
-  - [Further Reading](#further-reading)
-  - [Contributors](#contributors)
+- [Table Of Contents](#table-of-contents)
+  - [Install](#install)
+  - [Development Mode](#development-mode)
+    - [Launch Server](#launch-server)
+    - [Launch Client](#launch-client)
+    - [Test](#test)
+    - [fake.js](#fakejs)
+    - [redux.js](#reduxjs)
+    - [server.js](#serverjs)
+    - [Coverage](#coverage)
+  - [Production Mode](#production-mode)
+- [Further Reading](#further-reading)
+- [Contributors](#contributors)
 
 This starter kit was made to help students to develop red_tetris project : a Full Stack Javascript Tetris. We can also use it as a starting point for any product made of React / Redux and socket.io.
 
@@ -33,6 +32,8 @@ Because we use React, Redux, Node.js and Socket.io, we had to define 3 kinds of 
 - Redux ones, but instead of just testing pure functions, we defined a middleware to test state’s impact after one or many actions.
 - Redux/Socket.io/Node.js, same as before, we use the same middleware but this time we can test state’s updates after socketio messages round trip.
 
+[[Back to top]](#red-tetris)
+
 ### Install
 
 Install [node](https://nodejs.org/en/) first. After that:
@@ -42,6 +43,8 @@ npm install
 ```
 
 Edit `params.js` for your needs.
+
+[[Back to top]](#red-tetris)
 
 ### Development Mode
 
@@ -54,6 +57,8 @@ $ npm run  srv-dev
 ```
 
 It launches a node.js server listening for socket.io connexions, that is wired to receive `ping` messages and answered to … `pong`.
+
+[[Back to top]](#red-tetris)
 
 #### Launch Client
 
@@ -88,6 +93,8 @@ As you can guess we are using webpack `hot reload` module, try to update any fil
 [WDS] App updated. Recompiling...
 ```
 
+[[Back to top]](#red-tetris)
+
 #### Test
 
 Test, test and re-test …
@@ -100,9 +107,13 @@ npm run test
 
 Tests are installed under `test` folder.
 
+[[Back to top]](#red-tetris)
+
 #### fake.js
 
 A simple template to implement simple unit tests. In Tetris context you will try to test every functions or classes from server or client code. Just import your files and check (<http://shouldjs.github.io/)[should>] documentation to extend the test.
+
+[[Back to top]](#red-tetris)
 
 #### redux.js
 
@@ -152,6 +163,8 @@ Thanks to the hook you can react to actions, just to check a new state after an 
 
 In our sample, we register a callback when `ALERT_POP` will be dispatched and check that `state.message`is right. Callback is called after reducers.
 
+[[Back to top]](#red-tetris)
+
 #### server.js
 
 Very similar to previous test, but offer to test server code involved in a client action. You can use this kind of solution to test a pipeline like `action -> fetch -> action -> reducer`. Here client / server communication is based on socket.io and we use a middleware inspired by [redux-socket.io](https://github.com/itaylor/redux-socket.io) to transparantly dispatch and receive socket.io messages. So our test covers  `action -> socket.emit -> server code -> client socket callback -> action -> reducer`. I do not know if it’s still a unit test, but it’s a useful solution to test.
@@ -197,6 +210,8 @@ describe('Fake server test', function(){
 
 In our context, we dispatch `ping` action and register a callback on `pong` action.
 
+[[Back to top]](#red-tetris)
+
 #### Coverage
 
 ```bash
@@ -208,6 +223,8 @@ npm run coverage
 ```
 
 Check results …. of this command, and launch your browser to `./coverage/lcov-report/index.html`
+
+[[Back to top]](#red-tetris)
 
 ### Production Mode
 
@@ -251,6 +268,7 @@ In production mode, node.js server serves `index.html` and `bundle.js`, so you h
 
 That’s all folks ...
 
+[[Back to top]](#red-tetris)
 
 ## Further Reading
 
@@ -279,6 +297,8 @@ That’s all folks ...
 - [x] Security (Passwords / CSRF / SQL Injection)
 - [ ] BONUS
 
+[[Back to top]](#red-tetris)
+
 ## Contributors
 
 <!-- ![Mosima Mamaleke](api/uploads/default.png){:height="50%" width="50%"} ![Sibonelo Nkosi](api/uploads/default.png){:height="50%" width="50%"} -->
@@ -286,3 +306,5 @@ That’s all folks ...
 [Mosima Mamaleke](www.gihub.com/mmamalek)
 
 [Sibonelo Nkosi](www.github.com/sinkosi)
+
+[[Back to top]](#red-tetris)
