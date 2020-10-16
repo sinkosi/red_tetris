@@ -2,7 +2,8 @@
 /.vscode
 /.vs
 /docs
-/.frontend
+#/.frontend
+backup/node_modules
 /.red_tetris_boilerplate*/
 !*.pdf
 
