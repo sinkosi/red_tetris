@@ -1,26 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./components/App";
-
-const App2 = () => {
-	return (
-		<div>
-			<h1>Heading</h1>
-			AAnother test!
-
-		</div>
-	)
-}
-/*
 import React from "react"
 import ReactDOM from "react-dom"
-//import "./index.css"
-import App from "./App"
+import "./index.css"
+import App from "./components/App";
 import * as serviceWorker from "./serviceWorker"
-*/
+
 ReactDOM.render(
 	<React.StrictMode>
-		<App2 />
+		<App />
 	</React.StrictMode>,
 	document.getElementById("root")
 )
