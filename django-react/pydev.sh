@@ -1,1 +1,0 @@
-source venv/bin/activate && npm run dev --prefix ./frontend/ && python3 manage.py runserver
