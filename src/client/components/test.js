@@ -9,6 +9,8 @@ export const Tetris = () => {
 export const Board = () => {
   return (
     
-    <div/>
+    <div>
+      Sibo do you have a plan 'test.js'
+    </div>
   )
 }

@@ -1,10 +1,10 @@
-# Red Tetris<!-- omit in toc -->
+# Red Tetris<!-- omit in toc --> :100: Project
 
 ![Tetris Gameplay Page](docs/img192.png)
 
-## Table Of Contents
+## Table Of Contents<!-- omit in toc -->
 
-- [Table Of Contents](#table-of-contents)
+- [Getting Started](#getting-started)
   - [Install](#install)
   - [Development Mode](#development-mode)
     - [Launch Server](#launch-server)
@@ -17,6 +17,8 @@
   - [Production Mode](#production-mode)
 - [Further Reading](#further-reading)
 - [Contributors](#contributors)
+
+## Getting Started
 
 This starter kit was made to help students to develop red_tetris project : a Full Stack Javascript Tetris. We can also use it as a starting point for any product made of React / Redux and socket.io.
 
@@ -303,8 +305,8 @@ That’s all folks ...
 
 <!-- ![Mosima Mamaleke](api/uploads/default.png){:height="50%" width="50%"} ![Sibonelo Nkosi](api/uploads/default.png){:height="50%" width="50%"} -->
 
-[Mosima Mamaleke](www.gihub.com/mmamalek)
+[Mosima Mamaleke](http://www.github.com/mmamalek) :1st_place_medal: :man_dancing:
 
-[Sibonelo Nkosi](www.github.com/sinkosi)
+[Sibonelo Nkosi](http://www.github.com/sinkosi) :1st_place_medal: :thumbsup:
 
 [[Back to top]](#red-tetris)

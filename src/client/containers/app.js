@@ -1,18 +1,24 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 
-const App = ({message}) => {
-  return (
-    <span>{message}</span>
-  )
+import CssBaseline from "@material-ui/core/CssBaseline"
+
+import Header from "../components/Header"
+import Game from "../components/Game"
+
+import "./App.css"
+// import Footer from "./components/Footer"
+
+function App(props) {
+	return (
+		<>
+			<CssBaseline>
+				 <Header /> 
+				<Game />
+				{/* <Footer /> */}
+			</CssBaseline>
+		</>
+	)
 }
 
-const mapStateToProps = (state) => {
-  return {
-    message: state.message
-  }
-}
-export default connect(mapStateToProps, null)(App)
-
-
+export default App
