@@ -4,5 +4,5 @@ import App from './app'
 
 
 ReactDom.render((
-    <App message="An amazing tetris in its way. stay put"/>
+    <App message="An amazing tetris in its way. stay put for more"/>
 ), document.getElementById('tetris'))
