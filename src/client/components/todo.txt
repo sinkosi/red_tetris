@@ -1,0 +1,8 @@
+Start a New Game
+
+Pause Single Player Game
+View Other Canvas Multiplayer
+Scoring System
+Change state based on Single Player or Multiplayer
+
+"Header here. Hallo"

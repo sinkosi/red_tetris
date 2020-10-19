@@ -1,6 +1,7 @@
 import { config } from "./canvasConfig";
 import drawBlock from "./drawBlock";
 import { pieces, pieceStartPosition } from "./pieces";
+
 /***
  * Tetramino Class
  */
@@ -136,6 +137,7 @@ function newPiece(context, grid) {
   let [y, x] = pieceStartPosition(pieceNum, pieceVariant);
   newPiece.x = x;
   newPiece.y = y;
+
   // newPiece.draw()
   // if (newPiece.isCollision(x, y, pieceVariant)) return null
   return newPiece;

@@ -4,7 +4,7 @@ import controls from "../misc/controls";
 import { newPiece } from "../misc/Piece";
 import GameCanvas from "./GameCanvas";
 
-const Game = (props) => {
+const Game = () => {
   const [gameOver, setGameOver] = useState(true);
   const [grid, setGrid] = useState(null);
   const [currentPiece, setCurrentPiece] = useState(null);
