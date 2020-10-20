@@ -1,5 +1,7 @@
 import params from "../../params";
 import * as server from "./index";
-server
-  .create(params.server)
-  .then(() => console.log("not yet ready to play tetris with U. Next time?"));
+import room from "./rooms";
+server.create(params.server).then((x) => {
+  room(x.io);
+  console.log("not yet ready to play tetris with U. Next time?");
+});

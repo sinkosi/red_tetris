@@ -1,9 +1,11 @@
 var path = require("path");
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+const webpack = require("webpack");
+
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   entry: "./src/client/index.js",
+  mode: "development",
 
   output: {
     path: path.join(__dirname, "build/client"),
@@ -52,4 +54,9 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    /* ... */
+    // Only update what has changed on hot reload
+    new webpack.HotModuleReplacementPlugin(),
+  ],
 };
