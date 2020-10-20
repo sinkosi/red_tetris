@@ -8,6 +8,7 @@ const logerror = debug("tetris:error"),
 const initApp = (app, params, cb) => {
   const { host, port } = params;
   const handler = (req, res) => {
+    loginfo(req);
     const file =
       req.url === "/bundle.js" ? "/../../build/bundle.js" : "/../../index.html";
     fs.readFile(__dirname + file, (err, data) => {
@@ -32,6 +33,9 @@ const initApp = (app, params, cb) => {
 const initEngine = (io) => {
   io.on("connection", (socket) => {
     loginfo(`Socket connected:  ${socket.id}`);
+    socket.on("disconnecting", () =>
+      loginfo(`disconnecting user w id: ${socket.id}`)
+    );
     socket.on("action", (action) => {
       if (action.type === "server/ping") {
         socket.emit("action", { type: "pong" });
@@ -55,7 +59,7 @@ export function create(params) {
       };
 
       initEngine(io);
-      resolve({ stop });
+      resolve({ stop, io });
     });
   });
   return promise;

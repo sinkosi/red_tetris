@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -24,7 +25,7 @@ const Header = () => {
   return (
     <>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar variant="dense">
           <IconButton
             edge="start"
             className={classes.menuButton}
@@ -34,9 +35,9 @@ const Header = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            News
+            RedTetris
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit">Game</Button>
         </Toolbar>
       </AppBar>
     </>

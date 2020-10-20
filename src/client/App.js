@@ -1,31 +1,62 @@
-//import React, { useState } from "react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Route, HashRouter as Router } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import Header from "./components/Header";
 import Game from "./components/Game";
-import { params } from "../../params";
-// import "./App.css";
-// import Footer from "./components/Footer"
+import GameMenu from "./components/GameMenu";
+import WaitingRoom from "./components/WaitingRoom";
+import { server } from "../../params";
 
 import io from "socket.io-client";
-const { host, port } = params.server;
+import { ConnectionContext } from "./context/ConnectionContext";
+const { host, port } = server;
+
+// window.onbeforeunload = function () {
+//   return false;
+// };
 
 function App() {
-  console.log({ params });
-  const socket = io(`${host}:${port}`);
+  const [connection, setConnection] = useState({ connected: false });
+  const [username, setUsername] = useState("");
+  const [room, setRoom] = useState("room1");
 
-  socket.on("connect", (connection) => {
-    console.log({ connection });
-  });
-  // const [socketConnection, setSocketConnection] = useState(null);
+  console.log({ connection });
+
+  useEffect(() => {
+    const socket = io(`${host}:${port}`);
+    socket.on("connect", () => {
+      console.log("connection:", socket);
+      setConnection(() => setConnection(socket));
+    });
+
+    return () => {
+      console.log("cleanupconnection");
+    };
+  }, []);
 
   return (
     <>
       <CssBaseline>
-        <Header />
-        <Game />
-        {/* <Footer /> */}
+        <ConnectionContext.Provider value={{ connection, setConnection }}>
+          <Router hashType="noslash">
+            <Header />
+            <Route path="/game">
+              <Game />
+            </Route>
+            <Route exact path="/">
+              <GameMenu
+                username={username}
+                setUsername={setUsername}
+                room={room}
+                setRoom={setRoom}
+              />
+            </Route>
+            <Route path="/:roomId[:userId]">
+              <WaitingRoom room={room} username={username} />
+            </Route>
+          </Router>
+        </ConnectionContext.Provider>
       </CssBaseline>
     </>
   );
