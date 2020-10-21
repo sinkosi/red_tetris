@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
 import { server } from "../../../params";
 import { ConnectionContext } from "../context/ConnectionContext";
+import { useHistory } from "react-router-dom";
 
 const { host, port } = server;
 
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 const GameMenu = (props) => {
   const classes = useStyles();
   const { connection, setConnection } = useContext(ConnectionContext);
+  const history = useHistory();
   const [username, setUsername] = useState({
     value: props.username,
     error: false,
@@ -44,8 +46,9 @@ const GameMenu = (props) => {
         socket.on("welcome to the room", () => {
           setConnection(() => setConnection(socket));
           console.log("next step");
-          props.setUsername(username);
-          props.setRoom(room);
+          props.setUsername(username.value);
+          props.setRoom(room.value);
+          history.push(`/${room.value}[${username.value}]`);
         });
       });
     }
@@ -71,7 +74,7 @@ const GameMenu = (props) => {
     setRoom((room) => setRoom(room));
     return validateUsername;
   };
-  console.log(username);
+  //   console.log(username);
 
   const handleChangeUsername = (event) => {
     const value = `${event.target.value}`;
