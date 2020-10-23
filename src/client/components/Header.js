@@ -23,7 +23,6 @@ const Header = () => {
   const classes = useStyles();
   let history = useHistory();
 
-  console.log(history);
   return (
     <>
       <AppBar position="static">

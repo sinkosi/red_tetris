@@ -1,16 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import io from "socket.io-client";
-import { server } from "../../../params";
+
 import { ConnectionContext } from "../context/ConnectionContext";
 import { useHistory } from "react-router-dom";
-
-const { host, port } = server;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
 const GameMenu = (props) => {
   const classes = useStyles();
-  const { connection, setConnection } = useContext(ConnectionContext);
+  const { connection } = useContext(ConnectionContext);
   const history = useHistory();
   const [username, setUsername] = useState({
     value: props.username,
@@ -36,50 +33,71 @@ const GameMenu = (props) => {
     error: false,
     msg: "",
   });
-
   const enterRoom = () => {
-    const ticket = { username: username.value };
-
     if (validated()) {
-      const socket = io(`${host}:${port}/${room.value}`, { query: ticket });
-      socket.on("connect", () => {
-        socket.on("welcome to the room", () => {
-          setConnection(() => setConnection(socket));
-          console.log("next step");
-          props.setUsername(username.value);
-          props.setRoom(room.value);
-          history.push(`/${room.value}[${username.value}]`);
-        });
-      });
+      // createNewConnection(
+      //   username.value,
+      //   room.value,
+      //   connection,
+      //   setConnection
+      // );
+      history.push(`/${room.value}[${username.value}]`);
     }
   };
 
-  const validateUsername = (old = username) => {
-    console.log("duty calls", username);
+  const validateUsername = () => {
+    const regex = /[a-zA-Z0-9_-]{3,16}$/;
+    const u = username;
+    const message =
+      "Can only contain letters, numbers, hyphen (-) and underscore (_). No spaces. 3 characters min";
+
+    if (!regex.test(u.value)) {
+      u.error = true;
+      u.msg = message;
+    } else {
+      u.error = false;
+      u.msg = "";
+    }
+    setUsername(u);
+    return !u.error;
+  };
+
+  useEffect(() => {
+    validateUsername();
+    // console.log("validateUsername has ran with", username);
+  }, [username]);
+
+  const validateRoom = () => {
     const regex = /[a-zA-Z0-9_-]{3,16}$/;
     const message =
       "Can only contain letters, numbers, hyphen (-) and underscore (_). No spaces.";
-
-    if (!regex.test(username)) {
-      old.error = true;
-      old.msg = message;
+    const r = room;
+    if (!regex.test(room.value)) {
+      r.error = true;
+      r.msg = message;
     } else {
-      old.error = false;
-      old.msg = "";
+      r.error = false;
+      r.msg = "";
     }
-    setUsername(() => setUsername(old));
-    return !old.error;
+    setRoom(() => setRoom(r));
+    return !r.error;
   };
+
   const validated = () => {
-    setRoom((room) => setRoom(room));
-    return validateUsername;
+    if (validateUsername() && validateRoom()) {
+      props.setUsername(username.value);
+      props.setRoom(room.value);
+      return true;
+    } else return false;
   };
-  //   console.log(username);
 
   const handleChangeUsername = (event) => {
-    const value = `${event.target.value}`;
+    const value = `${event.target.value}` + "";
     setUsername({ ...username, value });
-    // validateUsername();
+  };
+  const handleChangeRoom = (event) => {
+    const value = `${event.target.value}`;
+    setRoom({ ...room, value });
   };
   return (
     <>
@@ -115,6 +133,7 @@ const GameMenu = (props) => {
               helperText="leave blank / empty to create a new room"
               value={room.value}
               error={room.error}
+              onChange={handleChangeRoom}
               //   helperText={room.msg}
             />
             <Button

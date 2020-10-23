@@ -1,15 +1,16 @@
-import { Button } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { ConnectionContext } from "../context/ConnectionContext";
 import controls from "../misc/controls";
 import { newPiece } from "../misc/Piece";
 import GameCanvas from "./GameCanvas";
 
-const Game = () => {
-  const [gameOver, setGameOver] = useState(true);
+const Game = (props) => {
+  const [gameOver, setGameOver] = useState(false);
   const [grid, setGrid] = useState(null);
   const [currentPiece, setCurrentPiece] = useState(null);
   const [nextPiece, setNextPiece] = useState(null);
   const [context, setContext] = useState(null);
+  const { connection } = useContext(ConnectionContext);
 
   useEffect(() => {
     // setCurrentPiece(newPiece())
@@ -26,7 +27,8 @@ const Game = () => {
     next.draw();
     setCurrentPiece(next);
     if (next.isCollision()) {
-      setGameOver(true);
+      props.setGameLoaded(false);
+      connection.emit("lost");
       setGrid(null);
       setContext(null);
     }
@@ -45,27 +47,19 @@ const Game = () => {
     };
   }, [currentPiece, grid, context]);
 
-  const handleStart = () => setGameOver(false);
-
   return (
     <>
-      {gameOver ? (
-        <Button color="primary" onClick={handleStart}>
-          start
-        </Button>
-      ) : (
-        <GameCanvas
-          setGameOver={setGameOver}
-          grid={grid}
-          setGrid={setGrid}
-          currentPiece={currentPiece}
-          setCurrentPiece={setCurrentPiece}
-          context={context}
-          setContext={setContext}
-          getNextPiece={getNextPiece}
-          gameOver={gameOver}
-        />
-      )}
+      <GameCanvas
+        setGameOver={setGameOver}
+        grid={grid}
+        setGrid={setGrid}
+        currentPiece={currentPiece}
+        setCurrentPiece={setCurrentPiece}
+        context={context}
+        setContext={setContext}
+        getNextPiece={getNextPiece}
+        gameOver={gameOver}
+      />
     </>
   );
 };

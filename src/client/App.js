@@ -6,49 +6,55 @@ import Header from "./components/Header";
 import Game from "./components/Game";
 import GameMenu from "./components/GameMenu";
 import WaitingRoom from "./components/WaitingRoom";
-// import SocketHandler from "./components/SocketHandler";
-
-import { server } from "../../params";
-
-import io from "socket.io-client";
 import { ConnectionContext } from "./context/ConnectionContext";
-const { host, port } = server;
+import useCookie from "./hooks/useCookie";
+import createNewConnection from "./createNewConnection";
 
 function App() {
-  const [connection, setConnection] = useState({ connected: false });
-  const [username, setUsername] = useState("");
-  const [room, setRoom] = useState("room1");
-  const [admin] = useState(false);
+  const [connection, setConnection] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [username, setUsername] = useCookie("username");
+  const [room, setRoom] = useCookie("room");
+  const [admin, setAdmin] = useState(false);
   // const [members, setMembers] = useState([]);
 
-  // console.log({ connection });
-
   useEffect(() => {
-    const socket = io(`${host}:${port}`);
-    socket.on("connect", () => {
-      console.log("connection:", socket);
-      setConnection(() => setConnection(socket));
-    });
+    createNewConnection(username, room, connection, setConnection);
 
     return () => {
       console.log("cleanupconnection");
-      socket.disconnect();
     };
-  }, []);
+  }, [room]);
 
   useEffect(() => {
-    if (connection.on)
-      connection.on("admin-change", (adminId) => console("new admin", adminId));
+    if (connection.connected) setLoading(false);
+
     return () => {};
   }, [connection]);
 
+  useEffect(() => {
+    if (connection.connected) {
+      connection.off("admin-change").on("admin-change", (admin) => {
+        console.log("The admin was changed.....", admin);
+        if (admin && admin.socketId === connection.id) setAdmin(true);
+        else setAdmin(false);
+      });
+    }
+
+    return () => {};
+  }, [connection]);
+
+  useEffect(() => {
+    if (connection.connected) connection.emit("admin-status-request");
+  }, [connection]);
+
+  if (loading) return <Loading />;
   return (
     <>
       <CssBaseline>
         <ConnectionContext.Provider value={{ connection, setConnection }}>
           <Router hashType="noslash">
             <Header />
-            {/* <SocketHandler /> */}
             <Route path="/game">
               <Game />
             </Route>
@@ -70,4 +76,14 @@ function App() {
   );
 }
 
+const Loading = () => {
+  return (
+    <>
+      <CssBaseline>
+        <Header />
+        <div>Loading...</div>
+      </CssBaseline>
+    </>
+  );
+};
 export default App;
