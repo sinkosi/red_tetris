@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Route, HashRouter as Router } from "react-router-dom";
+import { Route, HashRouter as Router, Redirect } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import Header from "./components/Header";
-import Game from "./components/Game";
 import GameMenu from "./components/GameMenu";
 import WaitingRoom from "./components/WaitingRoom";
 import { ConnectionContext } from "./context/ConnectionContext";
@@ -55,9 +54,7 @@ function App() {
         <ConnectionContext.Provider value={{ connection, setConnection }}>
           <Router hashType="noslash">
             <Header />
-            <Route path="/game">
-              <Game />
-            </Route>
+
             <Route exact path="/">
               <GameMenu
                 username={username}
@@ -67,7 +64,16 @@ function App() {
               />
             </Route>
             <Route path="/:roomId[:userId]">
-              <WaitingRoom room={room} username={username} admin={admin} />
+              <WaitingRoom
+                room={room}
+                setRoom={setRoom}
+                username={username}
+                setUsername={setUsername}
+                admin={admin}
+              />
+            </Route>
+            <Route path="/">
+              <Redirect to="/" />
             </Route>
           </Router>
         </ConnectionContext.Provider>

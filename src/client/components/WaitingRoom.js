@@ -7,6 +7,7 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import { ConnectionContext } from "../context/ConnectionContext";
 import Game from "./Game";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,6 +24,17 @@ const WaitingRoom = (props) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const classes = useStyles();
   const [gameLoaded, setGameLoaded] = useState(false);
+  const history = useHistory();
+
+  console.log({ history });
+
+  useEffect(() => {
+    const pathname = history.location.pathname;
+    const [room, username] = pathname.replace(/[\]|/]/g, "").split("[");
+
+    if (props.username != username) props.setUsername(username);
+    if (props.room != room) props.setRoom(room);
+  }, [props.username, props.room]);
 
   useEffect(() => {
     connection.off("online-users").on("online-users", (users) => {

@@ -73,7 +73,7 @@ const room = (io) => {
 
       console.log(`disconnecting user with id=${socket.id}`);
 
-      room.removeUser(socket.id);
+      socket ? room.removeUser(socket.id) : null;
       if (room.members.length === 0) delete rooms[room.id];
       else if (!room.admin) {
         room.chooseAdmin();
@@ -82,11 +82,17 @@ const room = (io) => {
       }
 
       console.log(rooms);
-      workspace.emit("online-users", rooms[workspace.name].members);
+      workspace.emit(
+        "online-users",
+        rooms[workspace.name] ? rooms[workspace.name].members : []
+      );
     });
 
     socket.on("online-users-request", () => {
-      workspace.emit("online-users", rooms[workspace.name].members);
+      workspace.emit(
+        "online-users",
+        rooms[workspace.name] ? rooms[workspace.name].members : []
+      );
     });
 
     socket.on("game-load-request", () => {
