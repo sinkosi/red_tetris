@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import { ConnectionContext } from "../context/ConnectionContext";
 import Game from "./Game";
 import { useHistory } from "react-router-dom";
+// import { Avatar, Grid } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,8 +26,7 @@ const WaitingRoom = (props) => {
   const classes = useStyles();
   const [gameLoaded, setGameLoaded] = useState(false);
   const history = useHistory();
-
-  console.log({ history });
+  const [initialPieces, setInitialPieces] = useState([]);
 
   useEffect(() => {
     const pathname = history.location.pathname;
@@ -41,24 +41,47 @@ const WaitingRoom = (props) => {
       setOnlineUsers(users);
     });
 
-    connection.off("load-load").on("game-load", () => setGameLoaded(true));
+    connection.off("terrain-update").on("terrain-update", (users) => {
+      setOnlineUsers(users);
+    });
+
+    connection.off("game-load").on("game-load", (piecesArr) => {
+      //pieces array
+      setInitialPieces(piecesArr);
+      setGameLoaded(true);
+    });
   }, []);
   useEffect(() => {
     connection.emit("online-users-request");
   }, []);
 
+  useEffect(() => {
+    if (gameLoaded) props.setInGame(true);
+    else props.setInGame(false);
+  }, [gameLoaded]);
+
   const loadGame = () => connection.emit("game-load-request");
-  if (gameLoaded) return <Game setGameLoaded={setGameLoaded} />;
-  else
+  if (gameLoaded) {
+    // props.setInGame(true);
+    return (
+      <Game
+        setGameLoaded={setGameLoaded}
+        onlineUsers={onlineUsers}
+        handleInGameTabChange={props.handleInGameTabChange}
+        inGameTab={props.inGameTab}
+        initialPieces={initialPieces}
+      />
+    );
+  } else
     return (
       <>
         <Container>
           <Paper align="center" className={classes.root}>
             <Container maxWidth="sm">
               <Typography variant="h2" component="h1" align="center">
-                The Waitingroom
+                Waiting room
               </Typography>{" "}
-              <Typography variant="h6" component="h2" align="center">
+              <Typography variant="body2" component="h2" align="center">
                 while waiting for the waitress, are you a waiter?
               </Typography>
               <Typography variant="h6" component="h2" align="center">
@@ -101,9 +124,12 @@ const OnlineUsers = ({ users }) => {
 const User = ({ user }) => {
   return (
     <>
-      <div>
+      <Paper
+        variant="outlined"
+        style={{ margin: "0.5rem 3rem", padding: "0.5rem" }}
+      >
         {user.alias} [{user.isadmin ? "admin" : ""}] - ({user.score})
-      </div>
+      </Paper>
     </>
   );
 };

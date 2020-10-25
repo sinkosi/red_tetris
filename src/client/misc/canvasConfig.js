@@ -4,5 +4,5 @@ exports.config = {
   EMPTY_BG: "#765",
   BORDER: "adf",
   PENALTY_BG: "red",
-  BLOCK: 30,
+  BLOCK: 25,
 };

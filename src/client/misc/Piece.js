@@ -121,11 +121,9 @@ function Piece(context, grid, piece, colour) {
   };
 }
 
-function newPiece(context, grid) {
+function newPiece(pieceNum, pieceVariant, context, grid) {
   // if (!context || !grid) return null
 
-  let pieceNum = Math.floor(Math.random() * pieces.length);
-  let pieceVariant = Math.floor(Math.random() * pieces[pieceNum][0].length);
   let newPiece = new Piece(
     context,
     grid,

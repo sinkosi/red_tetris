@@ -9,7 +9,8 @@ function Room(roomId, admin = "", alias = "", socketId = "") {
   this.id = roomId;
   this.admin = admin;
   this.members = [];
-  this.game = new Game();
+  this.game = null;
+  this.terrain = null;
 
   this.members.push(new User(alias, socketId));
   this.admin = this.members[0];
@@ -27,6 +28,12 @@ function Room(roomId, admin = "", alias = "", socketId = "") {
     if (this.members.length === 0)
       console.log("should now delete room ", this.id);
     else if (!this.admin) console.log("should now assign a new admin");
+  };
+
+  this.member = function (socketId) {
+    for (let i = 0; i < this.members.length; i++) {
+      if (this.members[i].socketId === socketId) return this.members[i];
+    }
   };
 
   this.chooseAdmin = function () {
@@ -50,14 +57,15 @@ function Game() {
   this.pieces = [];
   this.generatePieces = function () {
     let newPieces = [];
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 3000; i++) {
       let pieceNum = Math.floor(Math.random() * 7);
       let pieceVariant = Math.floor(Math.random() * 4);
       newPieces.push([pieceNum, pieceVariant]);
     }
-    console.log(newPieces);
-    this.pieces.concat(newPieces);
+    this.pieces = this.pieces.concat(newPieces);
+    return newPieces;
   };
+  this.generatePieces();
 }
 
 const room = (io) => {
@@ -96,15 +104,35 @@ const room = (io) => {
     });
 
     socket.on("game-load-request", () => {
-      workspace.emit("game-load");
+      let room = rooms[workspace.name];
+      room.game = new Game();
+      workspace.emit("game-load", room.game.pieces);
     });
 
     socket.on("admin-status-request", () => {
       workspace.emit("admin-change", rooms[workspace.name].admin);
       console.log(socket.id);
     });
+
+    socket.on("pieces-request", () => {
+      console.log("poece request from " + socket.id);
+      workspace.emit("new-pieces", rooms[workspace.name].game.generatePieces());
+    });
+
+    socket.on("terrain-update", (terrain) => {
+      const room = rooms[workspace.name];
+      room.member(socket.id).terrain = terrain;
+      socket.broadcast.emit("terrain-update", room.members);
+    });
+
+    socket.on("rows-cleared", (numOfRows) => {
+      ///some score calc in future
+      console.log("reveived penalty request: ", numOfRows);
+      socket.broadcast.emit("penalty", numOfRows);
+    });
+
     workspace.emit("online-users", rooms[workspace.name].members);
-    workspace.emit("welcome to the room");
+    // workspace.emit("welcome to the room");
     console.log(rooms);
   });
 

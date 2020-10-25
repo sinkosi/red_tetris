@@ -52,6 +52,7 @@ function CanvasGrid(
   };
 
   this.removeFilledLines = () => {
+    let numberOfLines = 0;
     for (let y = this.coords.length - 1; y > 0; y--) {
       let lineFull = true;
       for (let x = 0; x < this.coords[y].length; x++) {
@@ -64,6 +65,7 @@ function CanvasGrid(
         }
       }
       if (lineFull) {
+        numberOfLines++;
         for (let z = y; z > 0; z--) {
           this.coords[z] = this.coords[z - 1];
         }
@@ -76,6 +78,7 @@ function CanvasGrid(
       lineFull = true;
     }
     this.draw();
+    return numberOfLines;
   };
 }
 
