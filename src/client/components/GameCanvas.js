@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
+import { ConnectionContext } from "../context/ConnectionContext";
 import { config } from "../misc/canvasConfig";
 import CanvasGrid from "../misc/canvasGrid";
 
@@ -15,6 +16,7 @@ const GameCanvas = ({
   getNextPiece,
 }) => {
   const canvasRef = useRef(null);
+  const { connection } = useContext(ConnectionContext);
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -49,9 +51,15 @@ const GameCanvas = ({
       if (currentPiece)
         if (!currentPiece.moveDown()) {
           currentPiece.lock();
-          grid.removeFilledLines();
+          let numOfRemovedLines = grid.removeFilledLines();
+
           grid.draw();
           getNextPiece();
+          connection.emit("terrain-update", grid.coords);
+          if (numOfRemovedLines) {
+            console.log("emmiting penalties: ", numOfRemovedLines);
+            connection.emit("rows-cleared", numOfRemovedLines);
+          }
         }
     }, 1000);
     return () => clearInterval(interval);
