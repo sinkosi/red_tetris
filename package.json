@@ -34,6 +34,7 @@
     "@babel/plugin-proposal-function-bind": "^7.12.1",
     "@babel/preset-react": "^7.12.1",
     "@babel/preset-stage-0": "^7.8.3",
+    "babel-cli": "^6.26.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-__coverage__": "^11.0.0",
     "babel-preset-stage-0": "^6.24.1",
