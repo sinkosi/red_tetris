@@ -31,6 +31,7 @@ const Game = (props) => {
   const [piecesArr, setPiecesArr] = useState(props.initialPieces);
   const [nextPiece, setNextPiece] = useState(null);
   const [context, setContext] = useState(null);
+
   const { connection } = useContext(ConnectionContext);
 
   useEffect(() => {
@@ -40,16 +41,27 @@ const Game = (props) => {
   }, []);
 
   useEffect(() => {
+    props.setInGameTab(0);
+    return () => {
+      setGrid(null);
+      setContext(null);
+      console.log("deleting grid and context....");
+    };
+  }, []);
+  useEffect(() => {
     connection.off("new-pieces").on("new-pieces", (pieces) => {
       setPiecesArr(piecesArr.concat(pieces));
     });
 
     connection.off("penalty").on("penalty", (num) => {
-      console.log(num, "num of penalties");
-      // grid.currentPiece = currentPiece;
       for (let i = 0; i < num; i++) {
         grid.penalty(currentPiece);
       }
+    });
+
+    connection.off("game-over").on("game-over", (winner) => {
+      props.setLastWinner(winner);
+      props.setGameLoaded(false);
     });
   }, [grid, currentPiece]);
 
@@ -62,10 +74,9 @@ const Game = (props) => {
     setCurrentPiece(next);
 
     if (next.isCollision()) {
-      props.setGameLoaded(false);
+      setGameOver(true);
       connection.emit("lost");
-      setGrid(null);
-      setContext(null);
+      next.lock();
     }
     let [pieceNum, pieceVariant] = piecesArr[0];
     piecesArr.splice(0, 1);
@@ -133,6 +144,7 @@ const useStyles = makeStyles((theme) => ({
 const Peek = ({ onlineUsers }) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const { connection } = useContext(ConnectionContext);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -149,9 +161,13 @@ const Peek = ({ onlineUsers }) => {
         aria-label="Vertical tabs example"
         className={classes.tabs}
       >
-        {onlineUsers.map((user) => (
-          <Tab key={user.socketId} label={user.alias} />
-        ))}
+        {onlineUsers.map((user) =>
+          user.socketId === connection.id ? (
+            <></>
+          ) : (
+            <Tab key={user.socketId} label={user.alias} />
+          )
+        )}
       </Tabs>
       {onlineUsers.map((user, i) => (
         <TabPanel key={user.socketId} value={value} index={i}>

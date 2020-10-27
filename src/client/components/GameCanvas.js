@@ -10,7 +10,8 @@ const GameCanvas = ({
   currentPiece,
   setCurrentPiece,
   setGrid,
-  setGameOver,
+  gameOver,
+  // setGameOver,
   context,
   setContext,
   getNextPiece,
@@ -47,27 +48,31 @@ const GameCanvas = ({
   }, [context, grid, currentPiece, setCurrentPiece, setGrid, getNextPiece]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (currentPiece)
-        if (!currentPiece.moveDown()) {
-          currentPiece.lock();
-          let numOfRemovedLines = grid.removeFilledLines();
+    if (!gameOver) {
+      const interval = setInterval(() => {
+        if (currentPiece)
+          if (!currentPiece.moveDown()) {
+            currentPiece.lock();
+            let numOfRemovedLines = grid.removeFilledLines();
 
-          grid.draw();
-          getNextPiece();
-          connection.emit("terrain-update", grid.coords);
-          if (numOfRemovedLines) {
-            console.log("emmiting penalties: ", numOfRemovedLines);
-            connection.emit("rows-cleared", numOfRemovedLines);
+            grid.draw();
+            getNextPiece();
+            connection.emit("terrain-update", grid.coords);
+            if (numOfRemovedLines) {
+              console.log("emmiting penalties: ", numOfRemovedLines);
+              connection.emit("rows-cleared", numOfRemovedLines);
+            }
           }
-        }
-    }, 1000);
-    return () => clearInterval(interval);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
   }, [
     currentPiece,
     context,
     grid,
-    setGameOver,
+    gameOver,
+    // setGameOver,
     setCurrentPiece,
     setContext,
     getNextPiece,

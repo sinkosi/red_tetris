@@ -25,9 +25,16 @@ const TerrainViewer = (props) => {
         let gr = new CanvasGrid(context);
         gr.init();
         setGrid(gr);
-      } else {
-        // console.log("grid already exist")
-        // grid.draw()
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (context) {
+      if (!grid) {
+        let gr = new CanvasGrid(context);
+        gr.init();
+        setGrid(gr);
       }
     }
     return () => {};

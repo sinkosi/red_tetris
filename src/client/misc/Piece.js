@@ -124,11 +124,9 @@ function Piece(context, grid, piece, colour) {
         this.clear();
         this.y = this.y + 1;
       }
+      // this.grid.draw();
       this.draw();
-      // this.lock();
     }, 80);
-
-    // this.draw();
 
     // return false;
   };
