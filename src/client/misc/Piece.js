@@ -14,6 +14,7 @@ function Piece(context, grid, piece, colour) {
   this.y = 0;
   this.context = context;
   this.grid = grid;
+  this.locked = false;
 
   this.draw = (active = this.active) => {
     this.active = active;
@@ -36,6 +37,7 @@ function Piece(context, grid, piece, colour) {
     }
   };
   this.lock = () => {
+    this.locked = true;
     for (let row = 0; row < this.piece[this.active].length; row++) {
       for (let col = 0; col < this.piece[this.active][row].length; col++) {
         if (this.piece[this.active][row][col])
@@ -45,6 +47,7 @@ function Piece(context, grid, piece, colour) {
   };
 
   this.rotate = () => {
+    if (this.locked) return;
     if (!this.isCollision(this.x, this.y, (this.active + 1) % 4)) {
       this.clear();
       this.active = (1 + this.active) % this.piece.length;
@@ -70,6 +73,7 @@ function Piece(context, grid, piece, colour) {
   };
 
   this.moveLeft = () => {
+    if (this.locked) return;
     if (!this.isCollision(this.x - 1)) {
       this.clear();
       this.x = this.x - 1;
@@ -78,6 +82,7 @@ function Piece(context, grid, piece, colour) {
   };
 
   this.moveRight = () => {
+    if (this.locked) return;
     if (!this.isCollision(this.x + 1)) {
       this.clear();
       this.x = this.x + 1;
@@ -86,6 +91,7 @@ function Piece(context, grid, piece, colour) {
   };
 
   this.moveDown = () => {
+    if (this.locked) return;
     if (!this.isCollision(this.x, this.y + 1)) {
       this.clear();
       this.y = this.y + 1;
@@ -93,6 +99,38 @@ function Piece(context, grid, piece, colour) {
       return true;
     }
     return false;
+  };
+
+  this.fall = () => {
+    let i = 0;
+    let y = this.y;
+    let x = this.x;
+    if (this.locked) return;
+
+    while (!this.isCollision(this.x, this.y + 1)) {
+      // this.clear();
+      i++;
+      this.y = this.y + 1;
+      this.draw();
+    }
+    // this.y = y;
+
+    // i++;
+    this.lock();
+    setTimeout(() => {
+      this.x = x;
+      this.y = y;
+      while (i--) {
+        this.clear();
+        this.y = this.y + 1;
+      }
+      this.draw();
+      // this.lock();
+    }, 80);
+
+    // this.draw();
+
+    // return false;
   };
 
   this.isCollision = (newX = this.x, newY = this.y, newState = this.active) => {

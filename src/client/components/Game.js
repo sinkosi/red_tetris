@@ -46,9 +46,9 @@ const Game = (props) => {
 
     connection.off("penalty").on("penalty", (num) => {
       console.log(num, "num of penalties");
-      grid.currentPiece = currentPiece;
+      // grid.currentPiece = currentPiece;
       for (let i = 0; i < num; i++) {
-        grid.penalty();
+        grid.penalty(currentPiece);
       }
     });
   }, [grid, currentPiece]);

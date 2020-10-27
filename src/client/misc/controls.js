@@ -8,6 +8,7 @@ function controls(key, piece, grid, context) {
   if (key === "l") piece.lock();
   if (key === "p") grid.penalty(piece);
   if (key === "n") newPiece(context, grid);
+  if (key === " ") piece.fall();
 }
 
 export default controls;
