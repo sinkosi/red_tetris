@@ -25,6 +25,7 @@ const WaitingRoom = (props) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const classes = useStyles();
   const [gameLoaded, setGameLoaded] = useState(false);
+  const [lastWinner, setLastWinner] = useState(null);
   const history = useHistory();
   const [initialPieces, setInitialPieces] = useState([]);
 
@@ -69,7 +70,9 @@ const WaitingRoom = (props) => {
         onlineUsers={onlineUsers}
         handleInGameTabChange={props.handleInGameTabChange}
         inGameTab={props.inGameTab}
+        setInGameTab={props.setInGameTab}
         initialPieces={initialPieces}
+        setLastWinner={setLastWinner}
       />
     );
   } else
@@ -87,6 +90,13 @@ const WaitingRoom = (props) => {
               <Typography variant="h6" component="h2" align="center">
                 Room ID: {props.room}
               </Typography>
+              {lastWinner ? (
+                <Typography variant="body2" component="h2" align="center">
+                  Last winner: {lastWinner.alias}
+                </Typography>
+              ) : (
+                <></>
+              )}
               {props.admin ? (
                 <Button
                   variant="contained"

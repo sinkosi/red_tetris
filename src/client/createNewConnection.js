@@ -8,7 +8,7 @@ const createNewConnection = (username, room, connection, setConnection) => {
 
   if (connection && connection.connected && connection.nsp === `/${room}`) {
     console.error("already connected to the right room");
-    return;
+    return [null, "connected"];
   }
 
   if (connection && connection.disconnect) connection.disconnect();

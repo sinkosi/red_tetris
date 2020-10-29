@@ -83,6 +83,7 @@ function App() {
                   setInGame={setInGame}
                   handleInGameTabChange={handleInGameTabChange}
                   inGameTab={inGameTab}
+                  setInGameTab={setInGameTab}
                 />
               </Route>
               <Route path="/">

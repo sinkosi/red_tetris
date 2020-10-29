@@ -1,72 +1,6 @@
-function User(alias, socketId) {
-  this.alias = alias;
-  this.socketId = socketId;
-  this.score = 0;
-  this.isadmin = false;
-}
-
-function Room(roomId, admin = "", alias = "", socketId = "") {
-  this.id = roomId;
-  this.admin = admin;
-  this.members = [];
-  this.game = null;
-  this.terrain = null;
-
-  this.members.push(new User(alias, socketId));
-  this.admin = this.members[0];
-  this.admin.isadmin = true;
-
-  this.removeUser = function (socketId) {
-    let i = 0;
-    while (this.members[i] && this.members[i].socketId != socketId) i++;
-    if (this.members[i] && this.members[i].socketId === socketId) {
-      this.members[i] = null;
-      this.members.splice(i, 1);
-
-      if (this.admin.socketId === socketId) this.admin = null;
-    }
-    if (this.members.length === 0)
-      console.log("should now delete room ", this.id);
-    else if (!this.admin) console.log("should now assign a new admin");
-  };
-
-  this.member = function (socketId) {
-    for (let i = 0; i < this.members.length; i++) {
-      if (this.members[i].socketId === socketId) return this.members[i];
-    }
-  };
-
-  this.chooseAdmin = function () {
-    if (this.members.length > 0) {
-      let newNumber = Math.floor(Math.random() * this.members.length);
-
-      this.admin = this.members[newNumber];
-      this.admin.isadmin = true;
-    }
-  };
-}
-
-function Game() {
-  this.status = "waiting";
-
-  this.start = function () {
-    this.status = "in-progress";
-    this.generatePieces();
-  };
-
-  this.pieces = [];
-  this.generatePieces = function () {
-    let newPieces = [];
-    for (let i = 0; i < 3000; i++) {
-      let pieceNum = Math.floor(Math.random() * 7);
-      let pieceVariant = Math.floor(Math.random() * 4);
-      newPieces.push([pieceNum, pieceVariant]);
-    }
-    this.pieces = this.pieces.concat(newPieces);
-    return newPieces;
-  };
-  this.generatePieces();
-}
+import Room from "./Room";
+import Game from "./Game";
+import User from "./User";
 
 const room = (io) => {
   const rooms = {};
@@ -105,7 +39,12 @@ const room = (io) => {
 
     socket.on("game-load-request", () => {
       let room = rooms[workspace.name];
-      room.game = new Game();
+      room.startGame();
+      if (room.members.length === 1) {
+        room.game.mode = "single-player";
+        console.log("single player");
+      }
+      if (room.members.length > 1) room.game.mode = "multiplayer";
       workspace.emit("game-load", room.game.pieces);
     });
 
@@ -131,8 +70,25 @@ const room = (io) => {
       socket.broadcast.emit("penalty", numOfRows);
     });
 
+    socket.on("lost", () => {
+      const room = rooms[workspace.name];
+      const game = room.game;
+      if (game.mode === "single-player") socket.emit("game-over");
+      if (game.mode === "multiplayer") {
+        console.log(game);
+        room.memberLost(socket.id);
+        if (room.game && room.game.status === "game-over") {
+          console.log("emitting game-over");
+          workspace.emit("game-over", game.winner);
+
+          workspace.emit("online-users", room ? room.members : []);
+        }
+
+        console.log(game);
+      }
+    });
+
     workspace.emit("online-users", rooms[workspace.name].members);
-    // workspace.emit("welcome to the room");
     console.log(rooms);
   });
 
@@ -141,18 +97,22 @@ const room = (io) => {
     const alias = socket.handshake.query.username;
     const socketId = socket.id;
     const roomId = socket.nsp.name;
+    const room = rooms[roomId];
     if (!alias) {
-      console.log("denying connection...", { alias });
+      console.log("denying connection: username must be provided", { alias });
       next(new Error("username must be provided"));
+    } else if (room && room.game && room.game.status === "in-progress") {
+      console.log("denying connection: Game already in progress", { alias });
+      next(new Error("Game in progress"));
     } else {
       /*****
        * Stuff that happens on a connection requests
        */
 
       console.log(`welcoming ${alias} to room ${roomId}`);
-      if (rooms[roomId]) {
+      if (room) {
         console.log("adding user to the already existing room");
-        rooms[roomId].members.push(new User(alias, socketId));
+        room.members.push(new User(alias, socketId));
       } else {
         console.log("Creating a new room");
         rooms[roomId] = new Room(roomId, null, alias, socketId);
