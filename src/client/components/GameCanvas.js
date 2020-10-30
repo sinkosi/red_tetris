@@ -48,6 +48,9 @@ const GameCanvas = ({
   }, [context, grid, currentPiece, setCurrentPiece, setGrid, getNextPiece]);
 
   useEffect(() => {
+    if (grid) connection.emit("terrain-update", grid.coords);
+  }, [grid]);
+  useEffect(() => {
     if (!gameOver) {
       const interval = setInterval(() => {
         if (currentPiece)
